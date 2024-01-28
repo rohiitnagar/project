@@ -1,0 +1,205 @@
+create table Students(
+student_id int(5) primary key,
+first_name varchar(20),
+last_name varchar(20),
+dob date,
+email varchar(50),
+phone_number varchar(10)
+);
+
+create table Teacher(
+teacher_id int(5) primary key,
+first_name varchar(20),
+last_name varchar(20),
+email varchar(20)
+);
+
+
+create table Courses(
+course_id varchar(50) primary key,
+course_name varchar(50),
+credits int(5),
+teacher_id int(5),
+foreign key(teacher_id) references Teacher(teacher_id)
+);
+
+
+create table Enrollments(
+enrollment_id int(5) primary key,
+student_id int(5),
+course_id varchar(50),
+enrollment_date date,
+foreign key(student_id) references Students(student_id),
+foreign key(course_id) references Courses(course_id)
+);
+
+create table Payments(
+payment_id int(5) primary key,
+student_id int(5),
+amount int(8),
+payment_date date,
+foreign key(student_id) references Students(student_id)
+);
+
+
+insert into Students values
+(01,'Sam','Nate','2003-06-17','samuel12@gmail.com','9223455598'),
+(02,'Raj','Majeti','2004-09-12','raj12@gmail.com','9374455598'),
+(03,'sagar','mohan','2003-04-24','sagarm@gamil.com','9223436865'),
+(04,'surya','kumar','2003-09-28','surya@gmail.com','9223455640'),
+(05,'mohan','raj','2007-11-03','mohan@gmail.com','7803455598'),
+(06,'john','crita','2003-06-17','john21@gmail.com','9113455598'),
+(07,'henry','jones','2009-09-12','henry62@gmail.com','9365455598'),
+(08,'indiana','paul','2003-04-24','indiana34@gamil.com','9223436105'),
+(09,'max','wright','2001-09-28','max@gmail.com','9222355640'),
+(10,'charles','babbage','2009-11-03','charles32@gmail.com','780345878');
+
+select * from students;
+
+insert into Teacher values
+(202,'raj','mohan','raj01@gmail.com'),
+(203,'kumar','raja','kumar02@gmail.com'),
+(204,'lakshmi','narayana','laksmi03@gmail.com'),
+(205,'gauri','gopinath','gaurigopi@gmail.com'),
+(206,'rajesh','khanna','rajesh@gmail.com'),
+(207,'venkat','venu','venkatV@gmail.com'),
+(208,'sandeep','maheshwari','sandeepM@gmail.com'),
+(209,'meghna','pralay','meghpra@gmail.com'),
+(210,'jenna','chris','jennaC@gmail.com');
+
+select * from Teacher;
+
+
+insert into Courses values
+('m1','mathematics_1',4,206),
+('env','environmental_studies',2,203),
+('chm','chemistry',3,202),
+('cp','c prog lang',5,207),
+('stat','statistics',4,209),
+('stm','software testing meth',3,202),
+('cn','comp network',3,204),
+('cplab','c prog lab',4,205),
+('ds','data structures',3,208),
+('dslab','data structure',4,210)
+;
+
+select * from Courses;
+
+insert into Enrollments values
+(101,01,'m1','2024-01-04'),
+(102,01,'chm','2024-01-04'),
+(103,02,'cp','2024-01-04'),
+(104,01,'cplab','2024-01-04'),
+(105,04,'m1','2024-01-05'),
+(106,03,'stat','2024-01-05'),
+(107,03,'cn','2024-01-05'),
+(108,05,'ds','2024-01-03'),
+(109,05,'ds','2024-01-03'),
+(110,06,'dslab','2024-01-03');
+
+select * from Enrollments;
+
+insert into Payments values
+(301,01,45000,'2024-01-10'),
+(302,02,30000,'2024-01-01'),
+(303,03,32000,'2024-01-05'),
+(304,05,25000,'2024-01-03'),
+(305,04,25000,'2024-01-03'),
+(306,06,22000,'2024-01-10'),
+(307,07,35000,'2024-01-17'),
+(308,09,20000,'2024-01-17'),
+(309,08,21000,'2024-01-17'),
+(310,10,26000,'2024-01-21');
+
+select * from payments;
+
+
+-- TASK 2
+
+insert into Students (student_id,first_name,last_name,dob,email,
+phone_number) values
+(11,'John','Doe','1995-08-15','john.doe@gmail.com','1234567890');
+/*select * from Students;*/
+
+insert into Enrollments values(111,06,'stat','2024-01-25');
+/*select * from Enrollments;*/
+
+update Teacher set email='kumarikan@gmail.com' where first_name='kumar';
+/*select * from Teacher;*/
+
+delete from Enrollments where student_id=01 and course_id='chm';
+/*select * from Enrollments;*/
+
+update Courses set teacher_id='203' where course_id='chm';
+/*select * from Courses;*/
+
+delete from Enrollments where student_id='03';
+/*select * from Enrollments;*/
+
+update payments set amount='50000' where student_id=6;
+/*select * from payments*/
+
+-- TASK 3
+
+select s.student_id,s.first_name,s.last_name,s.dob,s.email,sum(p.amount)
+from Students s left join Payments p on s.student_id=p.student_id where p.student_id=2;
+
+select * from Enrollments;
+select c.course_name,count(e.student_id) as no_of_students
+from Courses c left join Enrollments e on c.course_id=e.course_id group by c.course_name;
+
+select s.student_id,s.first_name,s.last_name from Students s left join Enrollments e on s.student_id=e.student_id where e.student_id is null;
+
+select s.first_name,s.last_name,c.course_name from Students s left join 
+Enrollments e on s.student_id=e.student_id join Courses c on e.course_id=c.course_id;
+
+select t.first_name,t.last_name,c.course_name from Teacher t left join
+Courses c on t.teacher_id=c.teacher_id;
+
+select s.first_name,s.last_name,e.enrollment_date from Students s left join 
+Enrollments e on s.student_id=e.student_id join COurses c on e.course_id=c.course_id;
+
+select s.student_id,s.first_name,s.last_name from Students s left join Payments p on s.student_id=p.student_id where p.amount is null;
+
+select c.course_name from Courses c left join Enrollments e on c.course_id=e.course_id
+where e.student_id is null;
+
+-- TASK 4
+
+select c.course_id,c.course_name,avg(e.student_id) as avgstudentsenrolled
+from Courses c join Enrollments e on c.course_id=e.course_id group by c.course_id,c.course_name;
+
+select s.student_id,s.first_name,s.last_name,p.amount as highestpayment from Students s join Payments p on s.student_id=p.student_id
+where p.amount=(Select max(amount) from Payments);
+
+select c.course_id, c.course_name, count(e.enrollment_id) as enrollcount from Courses c join Enrollments e on c.course_id=e.course_id
+group by c.course_id,c.course_name having count(e.enrollment_id) = 
+(select max(enrollcount) from 
+(select course_id, count(enrollment_id) as enrollcount from Enrollments group by course_id) as maxenrollcounts);
+
+select t.teacher_id,t.first_name,t.last_name, sum(p.amount) as totpay from Teacher t join Courses c on t.teacher_id=c.teacher_id
+join Enrollments e on c.course_id=e.course_id join Payments p on e.student_id=p.student_id
+group by t.teacher_id,t.first_name,t.last_name;
+
+select s.student_id,s.first_name,s.last_name from Students s where
+(select count(distinct course_id)from Courses)=(select count(distinct course_id)from Enrollments e where e.student_id=s.student_id);
+
+-- 7th
+
+select c.course_id,c.course_name from Courses c left join Enrollments e on c.course_id=e.course_id
+where e.enrollment_id is null;
+
+select s.student_id,s.first_name,s.last_name,c.course_id,c.course_name, sum(p.amount) as totalpay from Students s join Enrollments e on s.student_id=e.student_id
+join Courses c on e.course_id=c.course_id join Payments p on s.student_id=p.student_id
+group by s.student_id,s.first_name,s.last_name,c.course_id,c.course_name;
+
+select s.student_id,s.first_name,s.last_name from Students s join Payments p on s.student_id=p.student_id
+group by s.student_id,s.first_name,s.last_name having count(p.payment_id)>1;
+
+select s.student_id,s.first_name,s.last_name,sum(p.amount) as totalpaym from Students s 
+join Payments p on s.student_id=p.student_id group by s.student_id,s.first_name,s.last_name;
+
+select c.course_id,c.course_name, count(e.student_id) as Studentsenrolled from Courses c left join Enrollments e on c.course_id=e.course_id
+group by c.course_id,c.course_name;
+
+select avg(p.amount) as AveragePaymentAmount from Payments p;
