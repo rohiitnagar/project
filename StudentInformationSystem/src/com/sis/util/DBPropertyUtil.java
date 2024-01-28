@@ -8,7 +8,7 @@ public class DBPropertyUtil {
 		Connection conn = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sisdb", "root", "Nageshanu18$");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sisdb", "root", "admin");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
